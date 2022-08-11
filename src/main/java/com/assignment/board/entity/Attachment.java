@@ -27,7 +27,13 @@ public class Attachment {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    public void Attachment(AttachmentRequest param) {
+    public Attachment(Article article, AttachmentRequest param) {
+        this.article = article;
         this.location = param.getLocation();
+    }
+
+    public Attachment(Article article, String location) {
+        this.article = article;
+        this.location = location;
     }
 }

@@ -15,17 +15,17 @@ import java.util.List;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 public class Board extends TimeStamped {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
     @Column(nullable = false, unique = true)
     private String name;
+
     @OneToMany(mappedBy = "board")
     private List<Article> articles = new ArrayList<>();
 
-    public void Board(BoardRequest param) {
+    public Board(BoardRequest param) {
         this.name = param.getName();
     }
 }
