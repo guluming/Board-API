@@ -36,14 +36,18 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private List<Attachment> Attachment = new ArrayList<>();
 
-    public void Article(ArticleRequest param) {
+    public Article(Board board, ArticleRequest param) {
+        this.board = board;
         this.title = param.getTitle();
         this.content = param.getContent();
     }
 
-    public void ArticleUpdate(ArticleRequest param) {
-        this.title = param.getTitle();
-        this.content = param.getContent();
+    public void articleTitleUpdate(String title) {
+        this.title = title;
+    }
+
+    public void articleContentUpdate(String content) {
+        this.content = content;
     }
 
     public void view_count() {

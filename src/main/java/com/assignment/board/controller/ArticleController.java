@@ -1,6 +1,5 @@
 package com.assignment.board.controller;
 
-import com.assignment.board.dto.request.ArticleListSearchCondition;
 import com.assignment.board.dto.request.ArticleRequest;
 import com.assignment.board.service.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class ArticleController {
-
     private final ArticleService articleService;
 
     @PostMapping("/{board_id}/post")
@@ -22,8 +20,10 @@ public class ArticleController {
     }
 
     @GetMapping("/post")
-    public ResponseEntity<?> getPostList(final ArticleListSearchCondition searchCondition) {
-        return articleService.getPostList(searchCondition);
+    public ResponseEntity<?> getPostList(@RequestParam(required = false) String startDateTime,
+                                         @RequestParam(required = false) String endDateTime,
+                                         @RequestParam(required = false) String boardName) {
+        return articleService.getPostList(startDateTime, endDateTime, boardName);
     }
 
     @GetMapping("/post/{post_id}")
@@ -36,7 +36,7 @@ public class ArticleController {
         return articleService.deletePost(ArticleId);
     }
 
-    @PatchMapping("/post/{post_id}")
+    @PutMapping("/post/{post_id}")
     public ResponseEntity<?> updatePost(@PathVariable("post_id") Long ArticleId,
                                         final @RequestBody ArticleRequest updatePost) {
         return articleService.updatePost(ArticleId, updatePost);
