@@ -1,5 +1,6 @@
 package com.assignment.board.entity;
 
+import com.assignment.board.dto.request.BoardRequest;
 import com.assignment.board.utill.TimeStamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,8 @@ public class Board extends TimeStamped {
     private String name;
     @OneToMany(mappedBy = "board")
     private List<Article> articles = new ArrayList<>();
+
+    public void Board(BoardRequest param) {
+        this.name = param.getName();
+    }
 }
