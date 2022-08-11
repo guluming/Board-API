@@ -14,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api")
 public class AttachmentController {
-
     private final AttachmentService attachmentService;
 
     @PostMapping("/{post_id}/files")
