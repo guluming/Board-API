@@ -37,12 +37,12 @@ public class Article {
     private List<Attachment> Attachment = new ArrayList<>();
 
     public void Article(ArticleRequest param) {
-        this.title = param.gerTitle();
+        this.title = param.getTitle();
         this.content = param.getContent();
     }
 
     public void ArticleUpdate(ArticleRequest param) {
-        this.title = param.gerTitle();
+        this.title = param.getTitle();
         this.content = param.getContent();
     }
 

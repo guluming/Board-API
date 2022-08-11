@@ -28,6 +28,6 @@ public class Attachment {
     private Article article;
 
     public void Attachment(AttachmentRequest param) {
-        this.location = param.getLoaction();
+        this.location = param.getLocation();
     }
 }
