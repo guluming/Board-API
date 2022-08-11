@@ -20,7 +20,6 @@ public class AttachmentService {
 
     @Transactional
     public ResponseEntity<?> registerFile(Long articleId, MultipartFile file) {
-
         return new ResponseEntity<>("파일이 업로드 되었습니다.", HttpStatus.CREATED);
     }
 

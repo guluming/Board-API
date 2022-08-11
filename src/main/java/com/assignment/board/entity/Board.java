@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 public class Board extends TimeStamped {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
