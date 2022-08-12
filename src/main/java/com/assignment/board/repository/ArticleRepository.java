@@ -14,4 +14,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     List<Article> findAllByEndDateTime(LocalDate endDateTime);
     @Query("select a from Article a where a.board.name like %:boardName% order by a.created_datetime desc")
     List<Article> findAllByBoardName(String boardName);
+    @Query("select a from Article a where a.created_datetime > :startDateTime and" +
+            " a.created_datetime < :endDateTime and" +
+            " a.board.name like %:boardName%" +
+            " order by a.created_datetime desc")
+    List<Article> findAllArticle(LocalDate startDateTime, LocalDate endDateTime, String boardName);
 }
