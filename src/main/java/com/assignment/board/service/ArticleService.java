@@ -1,14 +1,17 @@
 package com.assignment.board.service;
 
+import com.assignment.board.dto.request.ArticleListSearchCondition;
 import com.assignment.board.dto.request.ArticleRequest;
 import com.assignment.board.dto.response.ArticleResponse;
 import com.assignment.board.entity.Article;
 import com.assignment.board.entity.Attachment;
 import com.assignment.board.entity.Board;
+import com.assignment.board.repository.ArticleQueryRepository;
 import com.assignment.board.repository.ArticleRepository;
 import com.assignment.board.repository.AttachmentRepository;
 import com.assignment.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,12 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
 public class ArticleService {
     private final BoardRepository boardRepository;
     private final ArticleRepository articleRepository;
+    private final ArticleQueryRepository articleQueryRepository;
     private final AttachmentRepository attachmentRepository;
     private final AttachmentService attachmentService;
 
@@ -42,33 +47,20 @@ public class ArticleService {
         }
     }
 
-    public ResponseEntity<?> getPostList(String startDateTime, String endDateTime, String boardName) {
-        if (startDateTime != null) {
-            LocalDate startDate = LocalDate.parse(startDateTime, DateTimeFormatter.ISO_DATE);
-            List<Article> startDateTimeArticles = articleRepository.findAllByStartDateTime(startDate);
+    public ResponseEntity<?> getPostList(ArticleListSearchCondition articleListSearchCondition) {
+            List<Article> startDateTimeArticles = articleQueryRepository.findAllArticle(articleListSearchCondition);
             return new ResponseEntity<>(this.articleResponseList(startDateTimeArticles), HttpStatus.OK);
-        } else if (endDateTime != null) {
-            LocalDate endDate = LocalDate.parse(endDateTime, DateTimeFormatter.ISO_DATE);
-            List<Article> endDateTimeArticles = articleRepository.findAllByEndDateTime(endDate);
-            return new ResponseEntity<>(this.articleResponseList(endDateTimeArticles), HttpStatus.OK);
-        } else if (boardName != null) {
-            List<Article> boardNameArticles = articleRepository.findAllByBoardName(boardName);
-            return new ResponseEntity<>(this.articleResponseList(boardNameArticles), HttpStatus.OK);
-        } else {
-            List<Article> articles = articleRepository.findAll();
-            return new ResponseEntity<>(this.articleResponseList(articles), HttpStatus.OK);
-        }
     }
 
     public List<ArticleResponse> articleResponseList (List<Article> articles) {
         List<ArticleResponse> articleResponseList = new ArrayList<>();
-        for (int i = 0; i < articles.size(); i++) {
+        for (Article article : articles) {
             ArticleResponse articleResponse = new ArticleResponse();
-            articleResponse.setName(articles.get(i).getBoard().getName());
-            articleResponse.setTitle(articles.get(i).getTitle());
-            articleResponse.setCreated_datetime(articles.get(i).getCreated_datetime());
+            articleResponse.setName(article.getBoard().getName());
+            articleResponse.setTitle(article.getTitle());
+            articleResponse.setCreated_datetime(article.getCreated_datetime());
 
-            List<Attachment> locations = attachmentRepository.findByArticleId(articles.get(i).getId());
+            List<Attachment> locations = attachmentRepository.findByArticleId(article.getId());
             List<ArticleResponse.location> locationList = new ArrayList<>();
             ArticleResponse.location articleLocation = new ArticleResponse.location();
             articleLocation.setLocation(locations.get(0).getLocation());
